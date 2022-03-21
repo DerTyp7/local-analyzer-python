@@ -1,9 +1,9 @@
 from osm import OSM
 from publicTransport import PublicTransportAccessibility
 import requests
-
-lon = 7.1484281 # 8.6039883
-lat = 51.2559108  # 52.51608
+# bhv 53.51500036203292, 8.603602165157444
+lon = 8.603602165157444 # 8.6039883
+lat = 53.51500036203292  # 52.51608
 
 # TODO Get real value based on a metric radius
 areaHeightRadius = 0.01 # 0.01
@@ -21,6 +21,7 @@ requestsUrlParams = f"?bbox={minLon},{minLat},{maxLon},{maxLat}"
 print(requestUrl + requestsUrlParams)
 
 print("Downloading OSM-File...")
+# TODO Check if banned from overpass-api 
 r = requests.get(requestUrl + requestsUrlParams, headers={'Content-Type': 'application/xml'})
 print("Done: Downloading OSM-File")
 
