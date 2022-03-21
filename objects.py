@@ -10,8 +10,9 @@ class Node:
         self.user = str(_user)
 
 
-class NodeTags:
-    def __init__(self, _nodeId, _key, _value):
+class NodeTag:
+    def __init__(self, _id, _nodeId, _key, _value):
+        self.id = _id
         self.nodeId = int(_nodeId)
         self.key = str(_key)
         self.value = str(_value)

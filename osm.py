@@ -1,48 +1,37 @@
-from objects import 
+from objects import Node, NodeTag
+
 class OSM:
 	def __init__(self, _osmContent):
 		self.osmContent = str(_osmContent)
 		self.nodeList = []
+		self.nodeTagList = []
 		self.parseOsmContent()
 
 	def parseOsmContent(self):
 		lines = self.osmContent.split("\n")
-		
-		wayLines = []
+
 		nodeLines = []
 
 		for line in lines:
 			if "<node" in line:
 				if "/>" in line:
 					try:
-						self.createNode(conn, [line])
+						self.createNode([line])
 					except:
 						print("Node could not be inserted")
 				else:
 					nodeLines.append(line)
 			elif "</node>" in line:
 				try:
-					self.createNode(conn, nodeLines)
+					self.createNode(nodeLines)
 				except:
 					print("Node could not be inserted")
 				nodeLines = []
 			elif len(nodeLines) > 0:
 				nodeLines.append(line)
 				
-			elif "<way " in line:
-				wayLines.append(line)
-			elif "</way>" in line:
-				try:
-					#self.createWay(conn, wayLines)
-				except:
-					print("Way could not be inserted")
-				wayLines = []
-			elif len(wayLines) > 0:
-				wayLines.append(line)
-
 	def createNode(self, lines):
 		nodeId = ""
-
 
 		for line in lines:
 			if "<node" in line:
@@ -55,12 +44,11 @@ class OSM:
 				nodeUid = str(line.split('uid="')[1].split('"')[0])
 				nodeUser = str(line.split('user="')[1].split('"')[0])
 
-				n = Node
-				cur.execute('INSERT INTO nodes("id", "lon", "lat", "version", "timestamp", "changeset", "uid", "user") VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-				(nodeId, nodeLon, nodeLat, nodeVersion, nodeTimestamp, nodeChangeset, nodeUid, nodeUser))
+				n = Node(nodeId, nodeLon, nodeLat, nodeVersion, nodeTimestamp, nodeChangeset, nodeUid, nodeUser)
+				self.nodeList.append(n)
 
 			elif '<tag ' in line:
-				print("HALLO")
 				key = str(line.split('k="')[1].split('"')[0])
 				value = str(line.split('v="')[1].split('"')[0]) 
-				cur.execute('INSERT INTO node_tags("nodeId", "key", "value") VALUES (?,?,?)', (nodeId, key, value))
+				nt = NodeTag(len(self.nodeTagList), nodeId, key, value)
+				self.nodeTagList.append(nt)
