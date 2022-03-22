@@ -1,5 +1,14 @@
+
+# ! "amenity" are used very often in osm it's referreing to healtcare, police, cafe, pub, ice cream, post etc.
+# ! There is defently a need to sort them more on not just take them all into a "amenity" class
+
+# TODO new objects: healthcare, police
+
+# ? offices 
+# ? How to handle districts
+
 class Shop:
-    # TODO More optional details/attributes. Example: "website", "brand", "Telefone", "Owner"
+    # TODO More optional details/attributes. Example: "website", "brand", "Telefone", "Owner", "opening times"
     def __init__(self, _nodeIds, _name, _type):
         self.nodeIds = _nodeIds
         self.name = _name
