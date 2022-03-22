@@ -4,7 +4,7 @@ class Shops:
     def __init__(self, _osm):
         self.osm = _osm
     
-    def getAllShops(self):
+    def getAllShopTypes(self):
         shopList = []
         
         for tag in self.osm.nodeTagList:
@@ -16,14 +16,14 @@ class Shops:
                 shopList.append(tag.value)
         return shopList
 
-    def countOfShops(self):
-        shopList = self.getAllShops()
+    def countOfShopTypes(self):
+        shopList = self.getAllShopTypes()
         countDict = []
         
         if shopList:
             def isInDict(name):
                 for a in countDict:
-                    if a['name'] == name:
+                    if a['type'] == name:
                         return True
                 return False
 
@@ -31,5 +31,5 @@ class Shops:
                 print(shop)
                 if not isInDict(shop):
                     print("add" + str(shopList.count(shop)))
-                    countDict.append({'name': shop, 'count': shopList.count(shop)})
+                    countDict.append({'type': shop, 'count': shopList.count(shop)})
             return sorted(countDict, key=itemgetter('count'), reverse=True) 

@@ -47,4 +47,4 @@ print("Subway:" + str(pta.isSubwayAccessible()))
 print("Train:" + str(pta.isTrainAccessible()))
 print("Monorail:" + str(pta.isMonorailAccessible()))
 
-print(shops.countOfShops())
+print(shops.countOfShopTypes())
