@@ -24,13 +24,19 @@ requestUrl = "https://overpass-api.de/api/map"
 requestsUrlParams = f"?bbox={minLon},{minLat},{maxLon},{maxLat}"
 
 print(requestUrl + requestsUrlParams)
-
+""" # ONLINE
 print("Downloading OSM-File...")
 # TODO Check if banned from overpass-api MAYBE get alternative API then
 r = requests.get(requestUrl + requestsUrlParams, headers={'Content-Type': 'application/xml'})
 print("Done: Downloading OSM-File")
-
 osm = OSM(r.text)
+"""
+
+# Offline
+print("Using offline file!")
+file = open("mapHH", encoding="utf8")
+osm = OSM(file.read())
+
 pta = PublicTransportAccessibility(osm)
 shops = Shops(osm)
 
