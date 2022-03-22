@@ -1,7 +1,16 @@
+OFFLINE = True
+from managers import ShopManager
 from osm import OSM
-from places import Shops
 from publicTransport import PublicTransportAccessibility
 import requests
+
+# ADVANCED:
+# Get external data of shops, like website
+# Get General City/Region data: average age, peace index, democrazy index, average income  
+
+# IDEAS:
+# Parks
+# ATMs
 
 # 52.9152386,,15.96z
 # bhv 53.51500036203292, 8.603602165157444
@@ -23,28 +32,35 @@ maxLat = round(float(lat) + areaHeightRadius, 5)
 requestUrl = "https://overpass-api.de/api/map" 
 requestsUrlParams = f"?bbox={minLon},{minLat},{maxLon},{maxLat}"
 
-print(requestUrl + requestsUrlParams)
-""" # ONLINE
-print("Downloading OSM-File...")
-# TODO Check if banned from overpass-api MAYBE get alternative API then
-r = requests.get(requestUrl + requestsUrlParams, headers={'Content-Type': 'application/xml'})
-print("Done: Downloading OSM-File")
-osm = OSM(r.text)
-"""
 
-# Offline
-print("Using offline file!")
-file = open("mapHH", encoding="utf8")
-osm = OSM(file.read())
+if OFFLINE:
+    print("Using offline file!")
+    file = open("mapHH", encoding="utf8")
+    osm = OSM(file.read())
+else:
+    print(requestUrl + requestsUrlParams)
+    print("Downloading OSM-File...")
+    # TODO Check if banned from overpass-api MAYBE get alternative API then
+    r = requests.get(requestUrl + requestsUrlParams, headers={'Content-Type': 'application/xml'})
+    print("Done: Downloading OSM-File")
+    osm = OSM(r.text)
 
 pta = PublicTransportAccessibility(osm)
-shops = Shops(osm)
+shopManager = ShopManager(osm)
 
-print("Bus:" + str(pta.isBusAccessible()))
-print("Tram:" + str(pta.isTramAccessible()))
-print("Light Rail:" + str(pta.isLightRailAccessible()))
-print("Subway:" + str(pta.isSubwayAccessible()))
-print("Train:" + str(pta.isTrainAccessible()))
-print("Monorail:" + str(pta.isMonorailAccessible()))
+print("\n--- Public Transport Accessibility ---")
+print("Bus:        " + str(pta.isBusAccessible()))
+print("Tram:       " + str(pta.isTramAccessible()))
+print("Light Rail: " + str(pta.isLightRailAccessible()))
+print("Subway:     " + str(pta.isSubwayAccessible()))
+print("Train:      " + str(pta.isTrainAccessible()))
+print("Monorail:   " + str(pta.isMonorailAccessible()))
 
-print(shops.countOfShopTypes())
+print("\n--- 10 Most present shop types ---")
+counter = 0
+for s in shopManager.getCountsOfTypes():
+    if counter <= 10:
+        print(s['type'] + " : " + str(s['count']) + " times")
+    counter = counter + 1
+    
+

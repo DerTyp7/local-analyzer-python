@@ -1,7 +1,6 @@
-from osm import OSM
-from objects import Node, NodeTag
 
 class PublicTransportAccessibility:
+    # TODO count of each Ttransport type
     def __init__(self, _osm):
         self.osm = _osm
     

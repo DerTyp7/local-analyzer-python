@@ -1,12 +1,14 @@
-from objects import Node, NodeTag, Way, WayTag
+from objects import Node, NodeTag, Way, WayTag, Shop
 
 class OSM:
+	# TODO Average value of "last updated" to see how up to date the data is.
 	def __init__(self, _osmContent):
 		self.osmContent = str(_osmContent)
 		self.nodeList = []
 		self.nodeTagList = []
 		self.wayList = []
 		self.wayTagList = []
+		self.shopList = []
 		self.parseOsmContent()
 
 	def parseOsmContent(self):
@@ -42,8 +44,31 @@ class OSM:
 				wayLines = []
 			elif len(wayLines) > 0:
 				wayLines.append(line)
-			
-				
+
+	def createShop(self, lines):
+		# TODO Make sure shops are not duplicates.
+		# TODO e.g. REWE(shop) is big enough to have some "Ways" of it's own and multiple nodes, which can cause duplicates.
+
+		nodeIds = []
+		type = ""
+		name = ""
+
+		for line in lines:
+			if '<tag ' in line:
+				key = str(line.split('k="')[1].split('"')[0])
+				value = str(line.split('v="')[1].split('"')[0]) 
+
+				if key == "shop":
+					type = value
+				elif key == "name":
+					name = value
+			elif '<nd ' in line:
+				nodeIds.append(line.split('ref="')[1].split('"')[0])
+		
+		s = Shop(nodeIds, name, type)
+		self.shopList.append(s)
+
+
 	def createWay(self, lines):
 		wayId = ""
 
@@ -64,6 +89,9 @@ class OSM:
 				value = str(line.split('v="')[1].split('"')[0]) 
 				wt = WayTag(len(self.wayTagList), wayId, key, value)
 				self.wayTagList.append(wt)
+
+				if key == "shop":
+					self.createShop(lines)
 
 	def createNode(self, lines):
 		nodeId = ""
@@ -87,3 +115,6 @@ class OSM:
 				value = str(line.split('v="')[1].split('"')[0]) 
 				nt = NodeTag(len(self.nodeTagList), nodeId, key, value)
 				self.nodeTagList.append(nt)
+
+				if key == "shop":
+					self.createShop(lines)

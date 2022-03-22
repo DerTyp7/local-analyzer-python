@@ -1,3 +1,10 @@
+class Shop:
+    # TODO More optional details/attributes. Example: "website", "brand", "Telefone", "Owner"
+    def __init__(self, _nodeIds, _name, _type):
+        self.nodeIds = _nodeIds
+        self.name = _name
+        self.type = _type
+
 class Node:
     def __init__(self, _id, _lon, _lat, _version, _timestamp, _changeset, _uid, _user):
         self.id = int(_id)
