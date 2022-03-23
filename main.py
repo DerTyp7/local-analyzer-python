@@ -1,5 +1,5 @@
 OFFLINE = True
-from managers import ShopManager
+from managers import PlaceManager
 from osm import OSM
 from publicTransport import PublicTransportAccessibility
 import requests
@@ -46,7 +46,7 @@ else:
     osm = OSM(r.text)
 
 pta = PublicTransportAccessibility(osm)
-shopManager = ShopManager(osm)
+placeManager = PlaceManager(osm)
 
 print("\n--- Public Transport Accessibility ---")
 print("Bus:        " + str(pta.isBusAccessible()))
@@ -56,11 +56,9 @@ print("Subway:     " + str(pta.isSubwayAccessible()))
 print("Train:      " + str(pta.isTrainAccessible()))
 print("Monorail:   " + str(pta.isMonorailAccessible()))
 
-print("\n--- 10 Most present shop types ---")
+print("\n--- 20 Most present places types ---")
 counter = 0
-for s in shopManager.getCountsOfTypes():
-    if counter <= 10:
+for s in placeManager.getCountsOfTypes():
+    if counter <= 20:
         print(s['type'] + " : " + str(s['count']) + " times")
     counter = counter + 1
-    
-

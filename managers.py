@@ -1,6 +1,6 @@
 from operator import itemgetter
 
-class ShopManager:
+class PlaceManager:
     def __init__(self, _osm):
         self.osm = _osm
     
@@ -13,9 +13,25 @@ class ShopManager:
                     return True
             return False
 
-        if self.osm.shopList:
-            for shop in self.osm.shopList:
-                if not isInDict(shop.type):
-                    countDict.append({'type': shop.type, 'count': sum(a.type == shop.type for a in self.osm.shopList)})
+        if self.osm.placeList:
+            for place in self.osm.placeList:
+                if not isInDict(place.type):
+                    countDict.append({'type': place.type, 'count': sum(a.type == place.type for a in self.osm.placeList)})
                 
             return sorted(countDict, key=itemgetter('count'), reverse=True) 
+    
+    def getPlacesByType(self, type):
+        result = []
+        for a in self.osm.placeList:
+            if a.type == type:
+                result.append(a)
+
+        return result
+
+    def getPlacesByName(self, name):
+        result = []
+        for a in self.osm.placeList:
+            if a.name == name:
+                result.append(a)
+
+        return result
